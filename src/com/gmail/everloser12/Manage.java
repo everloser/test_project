@@ -65,8 +65,11 @@ public class Manage
 					} catch (Exception e)
 					{
 						JOptionPane.showMessageDialog(null, "ERROR in connection = " + e.getMessage());
+						
 					} finally
 					{
+						if (inpStrm != null)
+						{
 						try
 							{
 								inpStrm.close();
@@ -81,6 +84,7 @@ public class Manage
 							{
 								JOptionPane.showMessageDialog(null, "ERROR outputStream close = " + e.getMessage());
 							}
+						}
 					}
 				return file;
 			}

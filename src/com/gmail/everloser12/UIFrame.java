@@ -26,6 +26,10 @@ public class UIFrame extends JFrame
 		private Action grafAction;
 		private Action calcAction;
 		private JMenu sortMenu;
+		private int opane = -1;
+		private SimulatedActivity activity;
+		private Timer cancelMonitor;
+		private ProgressMonitor progressDialog;
 
 		public UIFrame()
 			{
@@ -36,51 +40,24 @@ public class UIFrame extends JFrame
 						SwingUtilities.updateComponentTreeUI(UIFrame.this);
 					} catch (Exception e)
 					{
-						JOptionPane.showMessageDialog(null, "Can not set LookAndFeel " + e.getMessage());						
+						JOptionPane.showMessageDialog(null, "Can not set LookAndFeel " + e.getMessage());
 					}
 
 				connectAction = new TwoImageAction("Download", "/download-icon.png", "/download-icons.png")
 					{
 						public void actionPerformed(ActionEvent event)
 							{
-								int pane = JOptionPane.showOptionDialog(UIFrame.this,
+								connectAction.setEnabled(false);
+								textArea.setText("Please, wait for downloading and parsing...\n");
+								opane = JOptionPane.showOptionDialog(UIFrame.this,
 										"select the type of file to download and parse", "Download data",
 										JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-										new Object[] { "XML /w.SAX", "JSON /w.simple", "JSON /w.GSON" }, "XML");
-								textArea.setText("Please, wait for downloading and parsing...");
-								switch (pane)
-								{
-								case 0:
-									{
-										Manage.parseXML();
-										if (Manage.getRoot() != null)
-										textArea.setText(Manage.getRoot().toString());
-										break;
-									}
-								case 1:
-									{
-										Manage.parseJSONSimpl();
-										if (Manage.getRoot() != null)
-										textArea.setText(Manage.getRoot().toString());
-										break;
-									}
-								case 2:
-									{
-										Manage.parseJSONGson();
-										if (Manage.getRoot() != null)
-										textArea.setText(Manage.getRoot().toString());
-										break;
-									}
-								}
-								if (Manage.getRoot() != null)
-									{
-										connectAction.setEnabled(false);
-										grafAction.setEnabled(true);
-										calcAction.setEnabled(true);
-										sortMenu.setEnabled(true);
-										sortCombo.setEnabled(true);
-									} else
-									textArea.setText("");
+										new Object[] { "XML /w.SAX", "JSON /w.simple", "JSON /w.GSON" }, "XML /w.SAX");
+
+								activity = new SimulatedActivity();
+								activity.execute();
+								progressDialog = new ProgressMonitor(UIFrame.this, "Download and Parsing", null, 0, 10);
+								cancelMonitor.start();
 							}
 					};
 
@@ -105,7 +82,8 @@ public class UIFrame extends JFrame
 														;
 													} catch (Exception e)
 													{
-														JOptionPane.showMessageDialog(null, "Can not write file " + e.getMessage());
+														JOptionPane.showMessageDialog(null,
+																"Can not write file " + e.getMessage());
 													}
 											}
 									}
@@ -141,7 +119,8 @@ public class UIFrame extends JFrame
 														ImageIO.write(image, "gif", chooser.getSelectedFile());
 													} catch (Exception e)
 													{
-														JOptionPane.showMessageDialog(null, "Can not write file " + e.getMessage());
+														JOptionPane.showMessageDialog(null,
+																"Can not write file " + e.getMessage());
 													}
 											}
 									}
@@ -185,7 +164,6 @@ public class UIFrame extends JFrame
 								find = textField.getText();
 								textField.setText("");
 								find(find, textArea);
-
 							}
 					};
 
@@ -254,9 +232,9 @@ public class UIFrame extends JFrame
 					{
 						public void actionPerformed(ActionEvent event)
 							{
-								if (dialog == null) 
+								if (dialog == null)
 									dialog = new HIWorksDialog(UIFrame.this);
-								dialog.setVisible(true); 
+								dialog.setVisible(true);
 							}
 					});
 				JMenuItem aboutItem = new JMenuItem("About");
@@ -264,9 +242,9 @@ public class UIFrame extends JFrame
 					{
 						public void actionPerformed(ActionEvent event)
 							{
-								if (dialog1 == null) // 
+								if (dialog1 == null) //
 									dialog1 = new AboutDialog(UIFrame.this);
-								dialog1.setVisible(true); 
+								dialog1.setVisible(true);
 							}
 					});
 				helpMenu.add(worksItem);
@@ -331,6 +309,40 @@ public class UIFrame extends JFrame
 				textArea.setEditable(false);
 				add(new JScrollPane(textArea), BorderLayout.CENTER);
 				pack();
+
+				cancelMonitor = new Timer(600, new ActionListener()
+					{
+						public void actionPerformed(ActionEvent event)
+							{
+								if (progressDialog.isCanceled())
+									{
+										activity.cancel(true);
+										textArea.setText("");
+										Manage.setRoot(null);
+										connectAction.setEnabled(true);
+										cancelMonitor.stop();
+									} else if (activity.isDone() && Manage.getRoot() != null)
+									{
+										progressDialog.close();
+										connectAction.setEnabled(false);
+										grafAction.setEnabled(true);
+										calcAction.setEnabled(true);
+										sortMenu.setEnabled(true);
+										sortCombo.setEnabled(true);
+										textArea.setText(Manage.getRoot().toString());
+										cancelMonitor.stop();
+									} else if (activity.isDone() && Manage.getRoot() == null)
+									{
+										progressDialog.close();
+										cancelMonitor.stop();
+										textArea.setText("");
+										connectAction.setEnabled(true);
+									}else
+									{
+										progressDialog.setProgress(activity.getProgress());
+									}
+							}
+					});
 			}
 
 		public static void find(String find, JTextArea textArea)
@@ -353,6 +365,55 @@ public class UIFrame extends JFrame
 									f = -1;
 							}
 						a = f + 1;
+					}
+			}
+
+		class SimulatedActivity extends SwingWorker<Void, Integer>
+			{
+				private int current = 0;
+
+				/**
+				 * Download, parse and constructs the simulated activity that
+				 * increments a counter from 0 to a 10
+				 */
+
+				protected Void doInBackground() throws Exception
+					{
+
+						switch (opane)
+						{
+						case 0:
+							{
+								Manage.parseXML();
+								break;
+							}
+						case 1:
+							{
+								Manage.parseJSONSimpl();
+								break;
+							}
+						case 2:
+							{
+								Manage.parseJSONGson();
+								break;
+							}
+						}
+						if (Manage.getRoot() != null)
+							{
+								try
+									{
+										while (current < 10)
+											{
+												Thread.sleep(300);
+												current++;
+												textArea.append("................\n");
+												setProgress(current);
+											}
+									} catch (InterruptedException e)
+									{
+									}
+							}
+						return null;
 					}
 			}
 	}

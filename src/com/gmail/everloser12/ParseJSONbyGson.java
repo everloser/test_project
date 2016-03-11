@@ -20,9 +20,12 @@ public class ParseJSONbyGson extends Parse
 				salary = Manage.download("http://kiparo.ru/t/salary.json", "salary.json");
 				try
 					{
-						BufferedReader reader = new BufferedReader(new FileReader(salary));
+						FileReader rsalary = new FileReader(salary);
+						BufferedReader reader = new BufferedReader(rsalary);
 						Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 						root = gson.fromJson(reader, Root.class);
+						reader.close();
+						rsalary.close();
 					} catch (Exception e)
 					{
 						JOptionPane.showMessageDialog(null, "GSON error = " + e.getMessage());

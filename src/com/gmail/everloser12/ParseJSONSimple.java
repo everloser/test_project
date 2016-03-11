@@ -27,7 +27,8 @@ public class ParseJSONSimple extends Parse
 				SimpleDateFormat formats = new SimpleDateFormat("yyyy-MM-dd");
 				try
 					{
-						JSONObject obj = (JSONObject) parser.parse(new FileReader(salary));
+						FileReader rsalary = new FileReader(salary);
+						JSONObject obj = (JSONObject) parser.parse(rsalary);
 						root = new Root();
 						String name = (String) obj.get("name");
 						root.setName(name);
@@ -72,11 +73,13 @@ public class ParseJSONSimple extends Parse
 								employeesList.add(employees);
 							}
 						root.setEmployees(employeesList);
+						rsalary.close();
 
 					} catch (Exception e)
 					{
 						JOptionPane.showMessageDialog(null, "JSON error = " + e.getMessage());
 					}
+				
 				salary.delete();
 			}
 
