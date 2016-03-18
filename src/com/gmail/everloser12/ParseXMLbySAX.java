@@ -16,6 +16,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+/**
+ * класс скачивает и парсит указанный файл в объект класса Root с помощью SAX парсера
+ * @author al-ev
+ *
+ */
 public class ParseXMLbySAX extends Parse
 	{
 

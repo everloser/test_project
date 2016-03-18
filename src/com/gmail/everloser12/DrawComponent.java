@@ -10,7 +10,11 @@ import java.awt.font.LineMetrics;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.JComponent;
-
+/**
+ * класс конструирует диаграмму с уровнями зарплат каждого Employees
+ * @author al-ev
+ *
+ */
 public class DrawComponent extends JComponent
 {
 	
@@ -41,7 +45,6 @@ public class DrawComponent extends JComponent
 	    {
 	       Graphics2D g2 = (Graphics2D) g;
 
-	       // compute the minimum and maximum values
 	       // находим мин и макс значения в массиве values
 	       // если массив пустой - выходим из цикла
 	       if (values == null) return;
@@ -62,7 +65,6 @@ public class DrawComponent extends JComponent
 	       Font titleFont = new Font("SansSerif", Font.BOLD, 20);
 	       Font labelFont = new Font("SansSerif", Font.PLAIN, 10);
 
-	       // compute the extent of the title
 	       FontRenderContext context = g2.getFontRenderContext();
 	       // прямоугольник по размерам строки title
 	       Rectangle2D titleBounds = titleFont.getStringBounds(title, context);
@@ -71,7 +73,7 @@ public class DrawComponent extends JComponent
 	       // величина равная высоте строки
 	       double top = titleBounds.getHeight();
 
-	       // draw the title
+	       // рисуем title
 	       // минус координата левого верхнего угла прямоугольника
 	       double y = -titleBounds.getY(); // ascent
 	       // рассчет х, чтобы title был по центру панели
@@ -80,7 +82,6 @@ public class DrawComponent extends JComponent
 	       g2.setFont(titleFont);
 	       g2.drawString(title, (float) x, (float) y);
 
-	       // compute the extent of the bar labels
 	       // получаем значение, равное высоте шрифта меток
 	       LineMetrics labelMetrics = labelFont.getLineMetrics("", context);
 	       double bottom = labelMetrics.getHeight();
@@ -89,17 +90,17 @@ public class DrawComponent extends JComponent
 	       y = panelHeight - labelMetrics.getDescent();
 	       g2.setFont(labelFont);
 
-	       // get the scale factor and width for the bars
+	       // рассчет коэфициента уменьшения и ширины столбиков
 	       // высота панели минус высота title минус высота names (labelfont) делим на разницу значений
 	       // рассчет уменьшения, чтобы влезли значения values
 	       double scale = (panelHeight - top - bottom) / (maxValue - minValue);
 	       // ширина столбика 
 	       int barWidth = panelWidth / values.length;
 
-	       // draw the bars
+	       // рисуем столбики
 	       for (int i = 0; i < values.length; i++)
 	       {
-	          // get the coordinates of the bar rectangle
+	          // координаты прямоугольника
 	          double x1 = i * barWidth + 1;
 	          double y1 = top;
 	          // высота столбика
@@ -114,14 +115,14 @@ public class DrawComponent extends JComponent
 	             height = -height;
 	          }
 
-	          // fill the bar and draw the bar outline
+	          // заливаем прямоугольник и делаем рамку
 	          Rectangle2D rect = new Rectangle2D.Double(x1, y1, barWidth - 2, height);
 	          g2.setPaint(Color.RED);
 	          g2.fill(rect);
 	          g2.setPaint(Color.BLACK);
 	          g2.draw(rect);
 
-	          // draw the centered label below the bar
+	          // рисуем метки имен
 	          Rectangle2D labelBounds = labelFont.getStringBounds(names[i], context);
 
 	          // длина строки, содержащей данную names

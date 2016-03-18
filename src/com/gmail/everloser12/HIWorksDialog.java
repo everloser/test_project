@@ -9,7 +9,11 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
+/**
+ * класс описывает JDialog, вызываемый из пункта меню Help/How It Works
+ * @author al-ev
+ *
+ */
 public class HIWorksDialog extends JDialog
 	{
 		public HIWorksDialog(JFrame owner)
@@ -20,12 +24,20 @@ public class HIWorksDialog extends JDialog
 			            new JLabel(
 			                  "<html><h1><i>Salary Setter</i></h1>"
 			                  + "<h2>Created by Konstantin Khurs  everloser12@gmail.com</h2>"
-			                  + "This program is the realization of study project, according to the Java for Android"
+			                  + "This program - is the realization of study project, according to the Java for Android"
 			                  + "<br />education program at JLTD \"EC Parka vysokih tehnologij\"<hr>"
-			                  + "To start working with the program you need to select the menu item <b>download</b>...."
-			                  + "<br />..........<br />...<hr> This program demonstrates the next Java's features:"
-			                  + "<ul><li> XML/JSON files parsing" +
-			                  "<li> implementations of .... <li> lalala <li> ... </ul>"),
+			                  + "To start working with the program you need to select the menu item <b>download</b>"
+			                  + "<br />and select the type of file to download and parse."
+			                  + "<br />If the download is successful, the data will appear in the textarea field"
+			                  + "<br /> after that you could use another options from menu"
+			                  + "<br /> .... <hr> This program demonstrates the next Java's features:"
+			                  + "<ul><li> XML/JSON files parsing with SAX/JSON Simple/GSON parsers" +
+			                  "<li> downloads files with HTTPUrlConnector"
+			                  + "<li> exception handling"
+			                  + "<li> multithreading with SwingWorker"
+			                  + "<li> implementations of inheritance, polymorphism and encapsulation"
+			                  + "<li> uses interfaces and abstract classes"
+			                  + "<li> etc... </ul></html>"),
 			            BorderLayout.CENTER);
 
 			      

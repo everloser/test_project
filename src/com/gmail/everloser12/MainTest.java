@@ -4,6 +4,12 @@ import java.awt.*;
 import java.net.*;
 import javax.swing.*;
 
+/**
+ * класс содержащий метод main, запускает программу SalarySetter
+ * создаем фрейм, объект UIFrame.
+ * @author al-ev
+ *
+ */
 public class MainTest
 {
 

@@ -10,6 +10,12 @@ import java.net.*;
 import javax.swing.*;
 import javax.imageio.ImageIO;
 
+/**
+ * класс описывает графический интерфейс программы
+ * 
+ * @author al-ev
+ *
+ */
 public class UIFrame extends JFrame
 	{
 		public static final int TEXT_ROWS = 30;
@@ -34,6 +40,7 @@ public class UIFrame extends JFrame
 		public UIFrame()
 			{
 
+				// устанавливаем стиль LookAndFeel отображения
 				try
 					{
 						UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -43,6 +50,7 @@ public class UIFrame extends JFrame
 						JOptionPane.showMessageDialog(null, "Can not set LookAndFeel " + e.getMessage());
 					}
 
+				// создаем объект Action, отвечающий за скачивание и парсинг
 				connectAction = new TwoImageAction("Download", "/download-icon.png", "/download-icons.png")
 					{
 						public void actionPerformed(ActionEvent event)
@@ -61,6 +69,8 @@ public class UIFrame extends JFrame
 							}
 					};
 
+				// создаем объект Action, отвечающий за экспорт содержимого
+				// текстовой области в файл
 				chooser = new JFileChooser();
 
 				Action exportAction = new TwoImageAction("Export", "/export-icon.png", "/export-icons.png")
@@ -90,6 +100,7 @@ public class UIFrame extends JFrame
 							}
 					};
 
+				// создаем объект Action, отвечающий за выход из программы
 				Action exitAction = new TwoImageAction("Exit", "/exit-icon.png", "/exit-icons.png")
 					{
 						public void actionPerformed(ActionEvent event)
@@ -98,6 +109,8 @@ public class UIFrame extends JFrame
 							}
 					};
 
+				// создаем объект Action, выводящий компонент с графикой и
+				// позволяющий сохранить ее в файл
 				grafAction = new TwoImageAction("Show Graphics", "/graf-icon.png", "/graf-icons.png")
 					{
 						public void actionPerformed(ActionEvent event)
@@ -130,6 +143,7 @@ public class UIFrame extends JFrame
 
 				grafAction.setEnabled(false);
 
+				// создаем объект Action, производящий рассчет зарплаты
 				calcAction = new TwoImageAction("Calculate", "/calc-icon.png", "/calc-icons.png")
 					{
 						public void actionPerformed(ActionEvent event)
@@ -142,6 +156,7 @@ public class UIFrame extends JFrame
 
 				calcAction.setEnabled(false);
 
+				// создаем объект Action, производящий очистку данных
 				Action clearAction = new TwoImageAction("Clear Data", "/clear-icon.png", "/clear-icons.png")
 					{
 						public void actionPerformed(ActionEvent event)
@@ -157,6 +172,7 @@ public class UIFrame extends JFrame
 							}
 					};
 
+				// создаем объект Action, обеспечивающий поиск по тексту
 				Action findAction = new TwoImageAction("Search", "/find-icon.png", "/find-icons.png")
 					{
 						public void actionPerformed(ActionEvent event)
@@ -167,7 +183,7 @@ public class UIFrame extends JFrame
 							}
 					};
 
-				// construct a File menu
+				// конструируем меню, добавляем в него объекты Action
 
 				JMenuBar mbar = new JMenuBar();
 				setJMenuBar(mbar);
@@ -180,6 +196,8 @@ public class UIFrame extends JFrame
 				fileMenu.add(grafAction);
 				fileMenu.add(clearAction);
 
+				// создаем и добавляем в меню ButtonGroup позволяющий
+				// производить сортировку
 				ButtonGroup group = new ButtonGroup();
 
 				JRadioButtonMenuItem name1 = new JRadioButtonMenuItem("by name");
@@ -210,6 +228,7 @@ public class UIFrame extends JFrame
 
 				fileMenu.addSeparator();
 				fileMenu.add(sortMenu);
+				// добавляем в меню возможность поиска
 				JMenuItem mFindItem = new JMenuItem("Find");
 				mFindItem.addActionListener(new ActionListener()
 					{
@@ -223,7 +242,7 @@ public class UIFrame extends JFrame
 							}
 					});
 				fileMenu.add(mFindItem);
-
+				// добавляем пункты меню How it works и About
 				fileMenu.addSeparator();
 				fileMenu.add(exitAction);
 				JMenu helpMenu = new JMenu("Help");
@@ -251,7 +270,7 @@ public class UIFrame extends JFrame
 				helpMenu.add(aboutItem);
 				mbar.add(helpMenu);
 
-				// construct a ToolBar
+				// конструируем ToolBar добавляя те же возможности, что и в Menu
 
 				JToolBar bar = new JToolBar();
 				bar.add(connectAction);
@@ -310,6 +329,9 @@ public class UIFrame extends JFrame
 				add(new JScrollPane(textArea), BorderLayout.CENTER);
 				pack();
 
+				// конструируем cancelMonitor, который следит, не отменили ли мы
+				// скачивание и парсинг и
+				// обновляющий окно progressDialog
 				cancelMonitor = new Timer(600, new ActionListener()
 					{
 						public void actionPerformed(ActionEvent event)
@@ -337,7 +359,7 @@ public class UIFrame extends JFrame
 										cancelMonitor.stop();
 										textArea.setText("");
 										connectAction.setEnabled(true);
-									}else
+									} else
 									{
 										progressDialog.setProgress(activity.getProgress());
 									}
@@ -345,6 +367,14 @@ public class UIFrame extends JFrame
 					});
 			}
 
+		/**
+		 * метод обеспечивает поиск текста
+		 * 
+		 * @param find
+		 *            - что ищем
+		 * @param textArea
+		 *            - где ищем
+		 */
 		public static void find(String find, JTextArea textArea)
 			{
 				String fff = textArea.getText();
@@ -368,14 +398,14 @@ public class UIFrame extends JFrame
 					}
 			}
 
+		/**
+		 * класс наследуется от SwingWorker, запускает отдельный поток на
+		 * скачивание и парсинг и имитирует длительность процесса, периодически
+		 * обновляя текстовую область и передавая данные в ProgressMonitor
+		 */
 		class SimulatedActivity extends SwingWorker<Void, Integer>
 			{
 				private int current = 0;
-
-				/**
-				 * Download, parse and constructs the simulated activity that
-				 * increments a counter from 0 to a 10
-				 */
 
 				protected Void doInBackground() throws Exception
 					{
@@ -420,6 +450,20 @@ public class UIFrame extends JFrame
 
 class TwoImageAction extends AbstractAction
 	{
+		/**
+		 * класс облегчающий создание объектов Action принимает в конструктор
+		 * имя, большую иконку, малую иконку и устанавливает объекту имя,
+		 * описание и создает ресурсы для файлов изображений
+		 * 
+		 * @author al-ev
+		 *
+		 * @param name
+		 *            - устанавливает объекту имя и описание
+		 * @param licon
+		 *            - иконка для TaskBar
+		 * @param sicon
+		 *            - иконка для Menu
+		 */
 		public TwoImageAction(String name, String licon, String sicon)
 			{
 				URL calc = getClass().getResource(licon);

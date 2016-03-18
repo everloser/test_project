@@ -13,6 +13,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+/**
+ * класс скачивает и парсит указанный файл в объект класса Root с помощью Json парсера
+ * @author al-ev
+ *
+ */
 public class ParseJSONSimple extends Parse
 	{
 		Root root = null;

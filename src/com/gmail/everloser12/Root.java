@@ -3,7 +3,12 @@ package com.gmail.everloser12;
 import java.util.List;
 
 
-
+/**
+ * класс хранящий структуру распарсиваемых файлов
+ * содержит базовые данные и коллекцию сотрудников
+ * @author al-ev
+ *
+ */
 public class Root
 	{
 		private String name;

@@ -12,6 +12,14 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+/**
+ * управляющий класс, содержит коллекцию с данными, получаемыми после парсинга
+ * содержит методы для скачивания файлов, парсинга, сортировок, рассчета
+ * зарплаты
+ * 
+ * @author al-ev
+ *
+ */
 public class Manage
 	{
 
@@ -37,6 +45,15 @@ public class Manage
 				Manage.root = root;
 			}
 
+		/**
+		 * метод для скачивания файла с помощью HttpURLConnection
+		 * 
+		 * @param string
+		 *            - URL адрес скачиваемого файла в виде строки
+		 * @param filez
+		 *            - название сохраняемого файла в виде строки
+		 * @return метод возвращает объект класса File
+		 */
 		public static File download(String string, String filez)
 			{
 				InputStream inpStrm = null;
@@ -65,26 +82,28 @@ public class Manage
 					} catch (Exception e)
 					{
 						JOptionPane.showMessageDialog(null, "ERROR in connection = " + e.getMessage());
-						
+
 					} finally
 					{
 						if (inpStrm != null)
-						{
-						try
 							{
-								inpStrm.close();
-							} catch (Exception e)
-							{
-								JOptionPane.showMessageDialog(null, "ERROR inputStream close = " + e.getMessage());
+								try
+									{
+										inpStrm.close();
+									} catch (Exception e)
+									{
+										JOptionPane.showMessageDialog(null,
+												"ERROR inputStream close = " + e.getMessage());
+									}
+								try
+									{
+										otpStrm.close();
+									} catch (Exception e)
+									{
+										JOptionPane.showMessageDialog(null,
+												"ERROR outputStream close = " + e.getMessage());
+									}
 							}
-						try
-							{
-								otpStrm.close();
-							} catch (Exception e)
-							{
-								JOptionPane.showMessageDialog(null, "ERROR outputStream close = " + e.getMessage());
-							}
-						}
 					}
 				return file;
 			}

@@ -9,6 +9,11 @@ import javax.swing.JOptionPane;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+/**
+ * класс скачивает и парсит указанный файл в объект класса Root с помощью Gson парсера
+ * @author al-ev
+ *
+ */
 public class ParseJSONbyGson extends Parse
 	{
 

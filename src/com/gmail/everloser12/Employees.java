@@ -3,7 +3,11 @@ package com.gmail.everloser12;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-
+/**
+ * класс описывает сотрудника
+ * @author al-ev
+ *
+ */
 public class Employees implements Comparable<Employees>
 	{
 		private long id;
