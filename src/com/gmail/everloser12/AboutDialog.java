@@ -33,7 +33,7 @@ public class AboutDialog extends JDialog
 	                  + "<h2>everloser12@gmail.com<hr></h2>"
 	                  + "This program - is the realization of study project<br />"
 	                  + "according to the Java for Android education program<br />"
-	                  + "at JLTD \"EC Parka vysokih tehnologij\"<hr>You could find the Code of this program at </html>");
+	                  + "at JLTD EC of High-Tech Park Belarus<hr>You could find the Code of this program at </html>");
 	                  
 	      
 	      JLabel jt = new JLabel("http://github.com/everloser/test_project");

@@ -126,16 +126,16 @@ public class Manage
 				root = parse.getResult();
 			}
 
-		public static void calculate()
-			{
-				long c = root.getBaseSalary();
-				List<Employees> e = root.getEmployees();
-				for (Employees em : e)
-					{
-						em.setRate(em.getRate() * c);
-					}
-				root.setEmployees(e);
-			}
+//		public static void calculate()
+//			{
+//				long c = root.getBaseSalary();
+//				List<Employees> e = root.getEmployees();
+//				for (Employees em : e)
+//					{
+//						em.setRate(em.getRate() * c);
+//					}
+//				root.setEmployees(e);
+//			}
 
 		public static void sortName()
 			{

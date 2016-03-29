@@ -164,8 +164,8 @@ public class Employees implements Comparable<Employees>
 				SimpleDateFormat formats = new SimpleDateFormat("yyyy-MM-dd");
 				String textDate = formats.format(dateOfBirth);
 				String salary = String.format("%.1f", rate);
-				return "\nEmployees id=" + id + "\n\tname=" + name + "\trate=" + salary + "\n\tdegree=" + degree + "\tdateOfBirth=" + textDate
-						+ "\n\tyearEperience=" + yearEperience + "\tvisible=" + visible + "\n\temails=" + Arrays.toString(emails);
+				return "\nEmployee id = " + id + "\n\tname = " + name + "\trate = " + salary + "\n\tdegree = " + degree + "\t\tdateOfBirth = " + textDate
+						+ "\n\tyearEperience = " + yearEperience + "\tvisible = " + visible + "\n\temails = " + Arrays.toString(emails);
 			}
 
 		@Override

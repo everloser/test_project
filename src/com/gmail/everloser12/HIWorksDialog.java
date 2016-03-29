@@ -25,7 +25,7 @@ public class HIWorksDialog extends JDialog
 			                  "<html><h1><i>Salary Setter</i></h1>"
 			                  + "<h2>Created by Konstantin Khurs  everloser12@gmail.com</h2>"
 			                  + "This program - is the realization of study project, according to the Java for Android"
-			                  + "<br />education program at JLTD \"EC Parka vysokih tehnologij\"<hr>"
+			                  + "<br />education program at JLTD EC of High-Tech Park Belarus<hr>"
 			                  + "To start working with the program you need to select the menu item <b>download</b>"
 			                  + "<br />and select the type of file to download and parse."
 			                  + "<br />If the download is successful, the data will appear in the textarea field"
@@ -34,6 +34,7 @@ public class HIWorksDialog extends JDialog
 			                  + "<ul><li> XML/JSON files parsing with SAX/JSON Simple/GSON parsers" +
 			                  "<li> downloads files with HTTPUrlConnector"
 			                  + "<li> exception handling"
+			                  + "<li> Swing(GUI widget toolkit for Java)"
 			                  + "<li> multithreading with SwingWorker"
 			                  + "<li> implementations of inheritance, polymorphism and encapsulation"
 			                  + "<li> uses interfaces and abstract classes"

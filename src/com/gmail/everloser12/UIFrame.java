@@ -8,6 +8,8 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.net.*;
 import javax.swing.*;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 import javax.imageio.ImageIO;
 
 /**
@@ -19,8 +21,10 @@ import javax.imageio.ImageIO;
 public class UIFrame extends JFrame
 	{
 		public static final int TEXT_ROWS = 30;
-		public static final int TEXT_COLUMNS = 50;
+		public static final int TEXT_COLUMNS = 40;
 		private JTextArea textArea;
+		private JPanel panel;
+		private JTextField panelText, panelText2, panelText3;
 		private JTextField textField;
 		private final String defaultText = "text to find";
 		private String find = new String();
@@ -36,6 +40,8 @@ public class UIFrame extends JFrame
 		private SimulatedActivity activity;
 		private Timer cancelMonitor;
 		private ProgressMonitor progressDialog;
+		private TableModel model;
+		private JTable table;
 
 		public UIFrame()
 			{
@@ -148,8 +154,12 @@ public class UIFrame extends JFrame
 					{
 						public void actionPerformed(ActionEvent event)
 							{
-								Manage.calculate();
-								textArea.setText(Manage.getRoot().toString());
+								model = new SalaryTable();
+								table.setModel(model);
+								//Manage.calculate();
+//								textArea.setText(Manage.getRoot().getEmployees().toString());
+//								panelText.setText(Manage.getRoot().getName());
+//								panelText2.setText(Manage.getRoot().getLocation());
 								calcAction.setEnabled(false);
 							}
 					};
@@ -162,6 +172,9 @@ public class UIFrame extends JFrame
 						public void actionPerformed(ActionEvent event)
 							{
 								textArea.setText("");
+								panelText.setText("");
+								panelText2.setText("");
+								panelText3.setText("");
 								textField.setText(defaultText);
 								Manage.setRoot(null);
 								connectAction.setEnabled(true);
@@ -169,6 +182,8 @@ public class UIFrame extends JFrame
 								calcAction.setEnabled(false);
 								sortMenu.setEnabled(false);
 								sortCombo.setEnabled(false);
+								model = new SalaryTable();
+								table.setModel(model);
 							}
 					};
 
@@ -207,7 +222,12 @@ public class UIFrame extends JFrame
 						public void actionPerformed(ActionEvent event)
 							{
 								Manage.sortName();
-								textArea.setText(Manage.getRoot().toString());
+								textArea.setText(Manage.getRoot().getEmployees().toString());
+								if (!calcAction.isEnabled())
+									{
+										model = new SalaryTable();
+										table.setModel(model);
+									}
 							}
 					});
 				gold1.addActionListener(new ActionListener()
@@ -215,7 +235,12 @@ public class UIFrame extends JFrame
 						public void actionPerformed(ActionEvent event)
 							{
 								Manage.sortSalary();
-								textArea.setText(Manage.getRoot().toString());
+								textArea.setText(Manage.getRoot().getEmployees().toString());
+								if (!calcAction.isEnabled())
+									{
+										model = new SalaryTable();
+										table.setModel(model);
+									}
 							}
 					});
 
@@ -290,11 +315,21 @@ public class UIFrame extends JFrame
 								{
 								case ("by name"):
 									Manage.sortName();
-									textArea.setText(Manage.getRoot().toString());
+								textArea.setText(Manage.getRoot().getEmployees().toString());
+								if (!calcAction.isEnabled())
+									{
+										model = new SalaryTable();
+										table.setModel(model);
+									}
 									break;
 								case ("by salary"):
 									Manage.sortSalary();
-									textArea.setText(Manage.getRoot().toString());
+								textArea.setText(Manage.getRoot().getEmployees().toString());
+								if (!calcAction.isEnabled())
+								{
+									model = new SalaryTable();
+									table.setModel(model);
+								}
 									break;
 								}
 							}
@@ -324,9 +359,26 @@ public class UIFrame extends JFrame
 				bar.add(exitAction);
 				add(bar, BorderLayout.NORTH);
 
+				panel = new JPanel();
+				panel.add(new JLabel("Company Name "));
+				panelText = new JTextField(15);
+				panelText2 = new JTextField(15);
+				panelText3 = new JTextField(10);
+				panelText.setEditable(false);
+				panelText2.setEditable(false);
+				panelText2.setEditable(false);
+				panel.add(panelText);
+				panel.add(new JLabel("Company Location "));
+				panel.add(panelText2);
+				panel.add(new JLabel("Base Salary "));
+				panel.add(panelText3);
+				add(panel, BorderLayout.SOUTH);
 				textArea = new JTextArea(TEXT_ROWS, TEXT_COLUMNS);
 				textArea.setEditable(false);
 				add(new JScrollPane(textArea), BorderLayout.CENTER);
+				model = new SalaryTable();
+				table = new JTable(model);
+				add(new JScrollPane(table), BorderLayout.EAST);
 				pack();
 
 				// конструируем cancelMonitor, который следит, не отменили ли мы
@@ -351,7 +403,10 @@ public class UIFrame extends JFrame
 										calcAction.setEnabled(true);
 										sortMenu.setEnabled(true);
 										sortCombo.setEnabled(true);
-										textArea.setText(Manage.getRoot().toString());
+										textArea.setText(Manage.getRoot().getEmployees().toString());
+										panelText.setText(Manage.getRoot().getName());
+										panelText2.setText(Manage.getRoot().getLocation());
+										panelText3.setText(String.valueOf(Manage.getRoot().getBaseSalary()));
 										cancelMonitor.stop();
 									} else if (activity.isDone() && Manage.getRoot() == null)
 									{
